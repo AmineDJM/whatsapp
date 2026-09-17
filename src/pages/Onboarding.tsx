@@ -34,15 +34,18 @@ export default function Onboarding() {
         const { error: upErr } = await supabase.storage.from('avatars').upload(path, avatarFile, { upsert: true })
         if (!upErr) avatar_url = supabase.storage.from('avatars').getPublicUrl(path).data.publicUrl
       }
-      const { error } = await supabase.from('profiles').update({
+      // Upsert so it works whether or not the trigger already created the row.
+      const { data, error } = await supabase.from('profiles').upsert({
+        id: session.user.id,
         username: uname, display_name: displayName.trim(), bio: bio.trim() || null,
         ...(avatar_url ? { avatar_url } : {}), updated_at: new Date().toISOString(),
-      }).eq('id', session.user.id)
+      }, { onConflict: 'id' }).select().single()
       if (error) {
         if (error.code === '23505' || /duplicate|unique/i.test(error.message)) toast('That username is taken', 'error')
         else toast(error.message, 'error')
         return
       }
+      if (!data) { toast('Could not save profile. Please try again.', 'error'); return }
       await refreshProfile()
       toast('Profile created', 'success')
     } finally {
