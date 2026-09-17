@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Thin WhatsApp-like scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,.2); border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); }
+
+/* Chat wallpaper doodle */
+.chat-bg {
+  background-color: #EFEAE2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23000000' stroke-opacity='0.03' stroke-width='1.2'%3E%3Ccircle cx='15' cy='15' r='5'/%3E%3Cpath d='M40 10 l6 6 -6 6 -6-6z'/%3E%3Cpath d='M8 44 q6 -8 12 0'/%3E%3Ccircle cx='46' cy='46' r='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+.dark .chat-bg {
+  background-color: #0B141A;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.03' stroke-width='1.2'%3E%3Ccircle cx='15' cy='15' r='5'/%3E%3Cpath d='M40 10 l6 6 -6 6 -6-6z'/%3E%3Cpath d='M8 44 q6 -8 12 0'/%3E%3Ccircle cx='46' cy='46' r='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Message bubble tails */
+.tail-out::after {
+  content: ''; position: absolute; top: 0; right: -8px;
+  border: 8px solid transparent; border-top-color: #D9FDD3; border-right: 0;
+}
+.dark .tail-out::after { border-top-color: #005C4B; }
+.tail-in::after {
+  content: ''; position: absolute; top: 0; left: -8px;
+  border: 8px solid transparent; border-top-color: #FFFFFF; border-left: 0;
+}
+.dark .tail-in::after { border-top-color: #202C33; }
+
+.typing-dot { animation: blink 1.4s infinite both; }
+.typing-dot:nth-child(2) { animation-delay: .2s; }
+.typing-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,80%,100% { opacity: .3 } 40% { opacity: 1 } }
+
+.safe-top { padding-top: var(--safe-top); }
+.safe-bottom { padding-bottom: var(--safe-bottom); }
+
+textarea { field-sizing: content; }
