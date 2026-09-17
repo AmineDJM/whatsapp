@@ -6,6 +6,7 @@ import './index.css'
 import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './components/Toast'
+import ErrorBoundary from './components/ErrorBoundary'
 
 // Register service worker for PWA
 if ('serviceWorker' in navigator) {
@@ -20,7 +21,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ToastProvider>
         <BrowserRouter>
           <AuthProvider>
-            <App />
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
           </AuthProvider>
         </BrowserRouter>
       </ToastProvider>
