@@ -377,13 +377,19 @@ create policy sview_select on public.status_views for select using (auth.role() 
 -- ============================================================================
 -- REALTIME
 -- ============================================================================
-alter publication supabase_realtime add table public.messages;
-alter publication supabase_realtime add table public.message_reactions;
-alter publication supabase_realtime add table public.message_reads;
-alter publication supabase_realtime add table public.conversations;
-alter publication supabase_realtime add table public.conversation_members;
-alter publication supabase_realtime add table public.calls;
-alter publication supabase_realtime add table public.profiles;
+do $$
+declare t text;
+begin
+  foreach t in array array[
+    'messages','message_reactions','message_reads','conversations',
+    'conversation_members','calls','profiles'
+  ] loop
+    begin
+      execute format('alter publication supabase_realtime add table public.%I', t);
+    exception when duplicate_object then null;
+    end;
+  end loop;
+end $$;
 
 -- ============================================================================
 -- STORAGE

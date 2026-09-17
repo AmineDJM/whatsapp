@@ -19,6 +19,18 @@ VITE_OPENAI_API_KEY=        # optional, enables live Meta AI
 Never expose the service-role key to the frontend.
 
 ## 3. Supabase setup (migration)
+
+### Option A — automatic (one command) ✨
+```bash
+SUPABASE_ACCESS_TOKEN=sbp_xxx npm run setup
+```
+Get a free token at <https://supabase.com/dashboard/account/tokens>. The script
+**creates the Supabase project, applies the whole migration (tables, RLS, storage
+buckets, realtime, RPCs), reads the API keys, and writes your `.env`** — then prints
+the exact values to paste into Render. To target an existing project instead:
+`SUPABASE_PROJECT_REF=xxxx SUPABASE_ACCESS_TOKEN=sbp_xxx npm run setup`.
+
+### Option B — manual
 1. Create a project at [supabase.com](https://supabase.com).
 2. In **SQL Editor**, paste and run the whole file `supabase/migrations/001_initial.sql`.
    This creates every table, index, RLS policy, trigger (auto-profile on signup),
